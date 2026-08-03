@@ -18,22 +18,20 @@ client.once("ready", () => {
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
 
+  if (message.content === "!ping") {
+    message.reply("🏓 Pong!");
+  }
+
   if (message.content === "!start") {
     try {
-      // Tự động gửi tin nhắn thẳng vào DMs của người vừa gõ lệnh
-      await message.author.send(
-        "📜 NHIỆM VỤ 1\n\nHãy trả lời đúng từ khóa:\n\n'SOFT'"
-      );
-      
-      // Phản hồi nhẹ ở kênh chat để người dùng biết check tin nhắn riêng
-      await message.reply("📬 Đã gửi nhiệm vụ vào tin nhắn riêng (DM) của bạn!");
+      await message.author.send("📜 NHIỆM VỤ 1\n\nHãy trả lời đúng từ khóa:\n\n'SOFT'");
+      await message.reply("📬 Đã gửi nhiệm vụ vào tin nhắn riêng của bạn!");
     } catch (error) {
-      console.error("Lỗi không thể gửi DM:", error);
-      await message.reply("❌ Bot không thể gửi DM! Hãy kiểm tra lại cài đặt riêng tư (Bật cho phép nhận DM từ thành viên server).");
+      console.error("Lỗi gửi DM:", error);
+      await message.reply("❌ Bot không gửi được DM! Bạn hãy bật tùy chọn 'Allow Direct Messages' trong Privacy Settings của Server nhé.");
     }
   }
 });
 
 client.login(process.env.TOKEN);
-
 
