@@ -1,5 +1,4 @@
 const { Client, GatewayIntentBits } = require("discord.js");
-
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -23,7 +22,7 @@ client.on("messageCreate", async (message) => {
 
   if (message.content === "!start") {
     try {
-      await message.author.send(
+       await message.author.send(
         "📜 NHIỆM VỤ 1\n\nHãy trả lời đúng từ khóa:\n\n'SOFT'"
       );
       message.reply("📬 Đã gửi nhiệm vụ vào tin nhắn riêng của bạn!");
@@ -33,7 +32,7 @@ client.on("messageCreate", async (message) => {
     }
   }
 });
-client.on("guildMemberAdd", async (member) => {
+ client.on("guildMemberAdd", async (member) => {
   try {
     await member.send(
       "📜 NHIỆM VỤ 1\n\nHãy trả lời đúng từ khóa:\n\nSOFT"
