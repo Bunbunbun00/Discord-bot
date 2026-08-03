@@ -29,7 +29,7 @@ Hãy trả lời đúng từ khóa:
 SOET`
     );
 
-    message.reply("📩 Tao đã gửi nhiệm vụ vào DM của mày!");
+    message.reply("📩 Đã gửi nhiệm vụ vào tin nhắn riêng của bạn!");
   }
 });
 
