@@ -16,21 +16,23 @@ client.once("ready", () => {
 
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
-  
+
   if (message.content === "!ping") {
     message.reply("🏓 Pong!");
   }
+
   if (message.content === "!start") {
-    await message.author.send(
-`📜 NHIỆM VỤ 1
-
-Hãy trả lời đúng từ khóa:
-
-SOET`
-   );
-
-    message.reply("📩 Đã gửi nhiệm vụ vào tin nhắn riêng của bạn!");
+    try {
+      await message.author.send(
+        "📜 NHIỆM VỤ 1\n\nHãy trả lời đúng từ khóa:\n\n'SOFT'"
+      );
+      message.reply("📬 Đã gửi nhiệm vụ vào tin nhắn riêng của bạn!");
+    } catch (error) {
+      console.error("Lỗi gửi DM:", error);
+      message.reply("❌ Không thể gửi DM cho bạn! Hãy kiểm tra cài đặt riêng tư (Privacy) hoặc mời bot vào server chung.");
+    }
   }
 });
 
 client.login(process.env.TOKEN);
+
