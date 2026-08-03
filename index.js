@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Partials } = require("discord.js");
+const { Client, GatewayIntentBits } = require("discord.js");
 
 const client = new Client({
   intents: [
@@ -7,8 +7,7 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.DirectMessages,
     GatewayIntentBits.GuildMembers
-  ],
-  partials: [Partials.Channel, Partials.Message]
+  ]
 });
 
 client.once("ready", () => {
@@ -24,14 +23,26 @@ client.on("messageCreate", async (message) => {
 
   if (message.content === "!start") {
     try {
-      await message.author.send("📜 NHIỆM VỤ 1\n\nHãy trả lời đúng từ khóa:\n\n'SOFT'");
-      await message.reply("📬 Đã gửi nhiệm vụ vào tin nhắn riêng của bạn!");
+      await message.author.send(
+        "📜 NHIỆM VỤ 1\n\nHãy trả lời đúng từ khóa:\n\n'SOFT'"
+      );
+      message.reply("📬 Đã gửi nhiệm vụ vào tin nhắn riêng của bạn!");
     } catch (error) {
       console.error("Lỗi gửi DM:", error);
-      await message.reply("❌ Bot không gửi được DM! Bạn hãy bật tùy chọn 'Allow Direct Messages' trong Privacy Settings của Server nhé.");
+      message.reply("❌ Không thể gửi DM cho bạn! Hãy kiểm tra cài đặt riêng tư (Privacy) hoặc mời bot vào server chung.");
     }
+  }
+});
+client.on("guildMemberAdd", async (member) => {
+  try {
+    await member.send(
+      "📜 NHIỆM VỤ 1\n\nHãy trả lời đúng từ khóa:\n\nSOFT"
+    );
+
+    console.log(`Đã gửi nhiệm vụ cho ${member.user.tag}`);
+  } catch (error) {
+    console.log("Không gửi được DM:", error);
   }
 });
 
 client.login(process.env.TOKEN);
-
