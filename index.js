@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits } = require("discord.js");
+pconst { Client, GatewayIntentBits } = require("discord.js");
 
 const client = new Client({
   intents: [
@@ -16,10 +16,6 @@ client.once("ready", () => {
 
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
-
-  if (message.content === "!ping") {
-    message.reply("🏓 Pong!");
-  }
   if (message.content === "!start") {
     await message.author.send(
 `📜 NHIỆM VỤ 1
