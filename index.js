@@ -30,7 +30,6 @@ SOET`
    );
 
     message.reply("📩 Đã gửi nhiệm vụ vào tin nhắn riêng của bạn!");
-  }
 });
 
 client.login(process.env.TOKEN);
