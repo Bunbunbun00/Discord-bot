@@ -20,6 +20,17 @@ client.on("messageCreate", async (message) => {
   if (message.content === "!ping") {
     message.reply("🏓 Pong!");
   }
+  if (message.content === "!start") {
+    await message.author.send(
+`📜 NHIỆM VỤ 1
+
+Hãy trả lời đúng từ khóa:
+
+SOET`
+    );
+
+    message.reply("📩 Tao đã gửi nhiệm vụ vào DM của mày!");
+  }
 });
 
 client.login(process.env.TOKEN);
