@@ -217,7 +217,7 @@ if (message.content.toLowerCase() === "msing") {
         .setTitle("🎼 Melody Journey")
 
         .setDescription(
-            "### 🎵 Thư giãn cùng tui...\n\n" +
+            "### 🎵 Thư giãn cùng mình...\n\n" +
             "♪ ♫ ♪ ♫ ♪ ♫ ♪\n\n" +
             "> Đang tận hưởng giai điệu..."
         )
@@ -341,65 +341,6 @@ EXP: **${player.exp}/${needExp(player.level)}**`
   const player = players.get(message.author.id);
 
   if (!player) return;
-  // =========================
-// LỆNH MSING
-// =========================
-
-if (message.content.toLowerCase() === "msing") {
-
-    const now = Date.now();
-
-    if (singCooldown.has(message.author.id)) {
-
-        const left = 10000 - (now - singCooldown.get(message.author.id));
-
-        if (left > 0)
-            return message.reply(`⏳ Hãy đợi **${Math.ceil(left / 1000)} giây** rồi hát tiếp.`);
-    }
-
-    singCooldown.set(message.author.id, now);
-
-    const player = getPlayer(message.author.id);
-
-    const loading = await message.reply({
-        embeds: [
-            new EmbedBuilder()
-                .setTitle("🎼 Hộp Nhạc Melody")
-                .setDescription("```Thư giãn cùng mình...```")
-                .setImage("https://media.tenor.com/j5m7K6kL8aUAAAAC/music-box.gif")
-                .setColor("#7B68EE")
-        ]
-    });
-
-    await new Promise(r => setTimeout(r, 3000));
-
-    const reward = randomReward();
-
-    player.notes += reward.amount;
-
-    addExp(player, reward.amount * 2);
-
-    await loading.edit({
-        embeds: [
-            new EmbedBuilder()
-                .setTitle("🎶 Bạn vừa cất tiếng hát!")
-                .setDescription(
-`✨ Độ hiếm: ${reward.rarity.emoji} **${reward.rarity.name}**
-
-🎵 Nhận được: **${reward.amount} Nốt Nhạc**
-
-📈 Level: **${player.level}**
-
-🎤 Danh hiệu:
-${player.singer}`
-                )
-                .setColor("#FFD700")
-        ]
-    });
-
-    return;
-
-      }
 
   const current = missions[player.stage];
 
@@ -445,4 +386,4 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
 
 client.login(process.env.TOKEN);
 
-                
+            
