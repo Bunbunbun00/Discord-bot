@@ -17,7 +17,7 @@ const players = new Map();
 // Danh sách nhiệm vụ
 const missions = [
   {
-    question: "📝 **NHIỆM VỤ 1**\nHãy tìm đáp án và nhập ở kênh lobby.",
+    question: "📝 **NHIỆM VỤ 1**\nTìm các số ngẫu nhiên được chat ngẫu nhiên trong sever.",
     answer: "134679"
   },
   {
@@ -30,7 +30,7 @@ const missions = [
   },
   {
     question: "📝 **NHIỆM VỤ 4**\nĐây là manh mối cuối cùng: .... --- / -.-. .... .. / -- .. -. .... / ...- .. / -.. .- .. (Giải mã morse này để hoàn thành câu đố ngày 1).",
-    answer: "Ho chi Minh Vi Dai"
+    answer: "HO CHI MINH VI DAI"
   }
 ];
 
@@ -90,7 +90,7 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
 3. ${player.answers[2]}
 4. ${player.answers[3]}
 
-📩 Bây giờ hãy mở **Ticket** và gửi 4 đáp án trên cho Staff để nhận thưởng nha.`
+📩 Chúc mừng bạn đã hoàn thành phần giải đố đầy khó khăn và thử thách. Chụp màn hình tin nhắn này của bạn và gửi qua <#1531673916085374990> để được điểm.`
 );
 
       players.delete(message.author.id);
