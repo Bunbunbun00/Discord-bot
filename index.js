@@ -18,19 +18,19 @@ const players = new Map();
 const missions = [
   {
     question: "📝 **NHIỆM VỤ 1**\nHãy tìm đáp án và nhập ở kênh lobby.",
-    answer: "SOFT"
+    answer: "134679"
   },
   {
-    question: "📝 **NHIỆM VỤ 2**\nHãy tìm đáp án tiếp theo.",
-    answer: "APPLE"
+    question: "📝 **NHIỆM VỤ 2**\nĐây là manh mối thứ 2 của bạn: c/T/Y/t./r/o/u/e/e/h/a/O/e/n/a/i (Sắp xếp lại thứ tự để mở nhiệm vụ thứ 3).",
+    answer: "toiyeuoceanheart"
   },
   {
-    question: "📝 **NHIỆM VỤ 3**\nHãy tìm đáp án tiếp theo.",
-    answer: "MOON"
+    question: "📝 **NHIỆM VỤ 3**\nĐây là manh mối thứ 3 của bạn: 03 01 03 08 13 01 14 07 20 08 01 14 07 20 01 13 (Hãy tìm ra quy luật và giải để mở khoá nhiệm vụ cuối cùng).",
+    answer: "cachmangthangtam"
   },
   {
-    question: "📝 **NHIỆM VỤ 4**\nĐây là nhiệm vụ cuối cùng.",
-    answer: "STAR"
+    question: "📝 **NHIỆM VỤ 4**\nĐây là manh mối cuối cùng: .... --- / -.-. .... .. / -- .. -. .... / ...- .. / -.. .- .. (Giải mã morse này để hoàn thành câu đố ngày 1).",
+    answer: "Ho chi Minh Vi Dai"
   }
 ];
 
