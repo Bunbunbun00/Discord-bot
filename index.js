@@ -217,7 +217,7 @@ if (message.content.toLowerCase() === "msing") {
         .setTitle("🎼 Melody Journey")
 
         .setDescription(
-            "### 🎵 Thư giãn cùng mình...\n\n" +
+            "### 🎵 Thư giãn cùng tui...\n\n" +
             "♪ ♫ ♪ ♫ ♪ ♫ ♪\n\n" +
             "> Đang tận hưởng giai điệu..."
         )
