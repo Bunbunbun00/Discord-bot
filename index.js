@@ -1,4 +1,11 @@
-const { Client, GatewayIntentBits, Partials } = require("discord.js");
+const {
+    Client,
+    GatewayIntentBits,
+    Partials,
+    EmbedBuilder
+} = require("discord.js");
+
+const fs = require("fs");
 
 const client = new Client({
   intents: [
@@ -13,7 +20,209 @@ const client = new Client({
 
 // Lưu tiến trình người chơi
 const players = new Map();
+// =========================
+// MELODY GAME DATA
+// =========================
 
+const musicPlayers = new Map();
+const singCooldown = new Map();
+
+const RARITIES = [
+  { name: "Common", chance: 50, min: 1, max: 5, emoji: "⚪" },
+  { name: "Rare", chance: 30, min: 6, max: 12, emoji: "🟢" },
+  { name: "Epic", chance: 15, min: 13, max: 22, emoji: "🟣" },
+  { name: "Legendary", chance: 4, min: 23, max: 35, emoji: "🟠" },
+  { name: "Mythic", chance: 1, min: 36, max: 50, emoji: "🔴" }
+];
+
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getPlayer(id) {
+  if (!musicPlayers.has(id)) {
+    musicPlayers.set(id, {
+      notes: 0,
+      exp: 0,
+      level: 1,
+      singer: "🎤 Người mới"
+    });
+  }
+  return musicPlayers.get(id);
+}
+
+function addExp(player, exp) {
+  player.exp += exp;
+
+  while (player.exp >= player.level * 100) {
+    player.exp -= player.level * 100;
+    player.level++;
+
+    if (player.level >= 50) player.singer = "👑 Huyền thoại";
+    else if (player.level >= 30) player.singer = "🌟 Siêu sao";
+    else if (player.level >= 20) player.singer = "🎙️ Ca sĩ";
+    else if (player.level >= 10) player.singer = "🎶 Thực tập sinh";
+  }
+}
+
+function randomReward() {
+  let roll = Math.random() * 100;
+  let total = 0;
+
+  for (const r of RARITIES) {
+    total += r.chance;
+    if (roll <= total) {
+      return {
+        rarity: r,
+        amount: rand(r.min, r.max)
+      };
+    }
+  }
+
+  return {
+    rarity: RARITIES[0],
+    amount: 1
+  };
+    }
+//======================
+// Melody Game Database
+//======================
+
+const musicPlayers = {};
+const cooldown = new Map();
+
+function getPlayer(id) {
+
+    if (!musicPlayers[id]) {
+
+        musicPlayers[id] = {
+
+            notes: 0,
+            level: 1,
+            exp: 0,
+            coin: 0,
+
+            title: "🎤 Người mới",
+
+            equipped: "🎤 Micro Thường",
+
+            inventory: []
+
+        };
+
+    }
+
+    return musicPlayers[id];
+
+}
+
+function needExp(level){
+
+    return level * 100;
+
+}
+
+function addExp(player, amount){
+
+    player.exp += amount;
+
+    while(player.exp >= needExp(player.level)){
+
+        player.exp -= needExp(player.level);
+
+        player.level++;
+
+        if(player.level >= 5)
+            player.title = "🎙 Ca sĩ nghiệp dư";
+
+        if(player.level >= 10)
+            player.title = "🎵 Nghệ sĩ đường phố";
+
+        if(player.level >= 20)
+            player.title = "🌟 Rising Star";
+
+        if(player.level >= 35)
+            player.title = "👑 Melody Master";
+
+        if(player.level >= 50)
+            player.title = "💎 Legendary Singer";
+
+    }
+
+}
+function randomReward(){
+
+    const r = Math.random();
+
+    if(r < 0.001){
+
+        return{
+
+            rarity:"🌈 Divine",
+            color:"#ff00ff",
+            multi:12
+
+        };
+
+    }
+
+    if(r < 0.01){
+
+        return{
+
+            rarity:"🔴 Mythic",
+            color:"#ff2222",
+            multi:8
+
+        };
+
+    }
+
+    if(r < 0.03){
+
+        return{
+
+            rarity:"🟠 Legendary",
+            color:"#ff8800",
+            multi:5
+
+        };
+
+    }
+
+    if(r < 0.10){
+
+        return{
+
+            rarity:"🟣 Epic",
+            color:"#c44dff",
+            multi:3
+
+        };
+
+    }
+
+    if(r < 0.25){
+
+        return{
+
+            rarity:"🔵 Rare",
+            color:"#3da5ff",
+            multi:2
+
+        };
+
+    }
+
+    return{
+
+        rarity:"⚪ Common",
+        color:"#ffffff",
+        multi:1
+
+    };
+
+}
 // Danh sách nhiệm vụ
 const missions = [
   {
@@ -40,6 +249,134 @@ client.once("ready", () => {
 
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
+  //======================
+// msing
+//======================
+
+if (message.content.toLowerCase() === "msing") {
+
+    const last = cooldown.get(message.author.id);
+
+    if (last && Date.now() - last < 10000) {
+
+        const left = Math.ceil((10000 - (Date.now() - last)) / 1000);
+
+        return message.reply(`⏳ Bạn cần nghỉ **${left} giây** trước khi hát tiếp!`);
+
+    }
+
+    cooldown.set(message.author.id, Date.now());
+
+    const player = getPlayer(message.author.id);
+
+    const loading = new EmbedBuilder()
+
+        .setColor("#ffb6c1")
+
+        .setTitle("🎼 Melody Journey")
+
+        .setDescription(
+            "### 🎵 Thư giãn cùng mình...\n\n" +
+            "♪ ♫ ♪ ♫ ♪ ♫ ♪\n\n" +
+            "> Đang tận hưởng giai điệu..."
+        )
+
+        // Đổi thành link ảnh hộp nhạc của mày nếu muốn
+        .setThumbnail("https://i.imgur.com/4M34hi2.png")
+
+        .setFooter({
+            text: "Vui lòng chờ 3 giây..."
+        });
+
+    const msg = await message.reply({
+        embeds: [loading]
+    });
+
+    await new Promise(r => setTimeout(r, 3000));
+
+    const reward = randomReward();
+
+    let notes = Math.floor(Math.random() * 41) + 10;
+
+    notes *= reward.multi;
+
+    let exp = Math.floor(Math.random() * 16) + 10;
+
+    let bonus = "";
+
+    // Lucky
+    if (Math.random() < 0.12) {
+
+        notes *= 2;
+
+        bonus += "\n🍀 **Lucky Bonus x2**";
+
+    }
+
+    // Critical
+    if (Math.random() < 0.08) {
+
+        exp *= 2;
+
+        bonus += "\n✨ **Perfect Performance! EXP x2**";
+
+    }
+
+    player.notes += notes;
+
+    addExp(player, exp);
+
+    const bar =
+        "🟩".repeat(
+            Math.floor((player.exp / needExp(player.level)) * 10)
+        ) +
+        "⬜".repeat(
+            10 - Math.floor((player.exp / needExp(player.level)) * 10)
+        );
+
+    const result = new EmbedBuilder()
+
+        .setColor(reward.color)
+
+        .setTitle("🎤 Melody Journey")
+
+        .setDescription(
+
+`## 🎶 Buổi biểu diễn kết thúc!
+
+🎼 **+${notes} Melody Notes**
+
+⭐ **+${exp} EXP**
+
+🏆 **${reward.rarity}**
+
+${bonus}
+
+━━━━━━━━━━━━━━
+
+👤 **${player.title}**
+
+📈 Level **${player.level}**
+
+${bar}
+
+EXP: **${player.exp}/${needExp(player.level)}**`
+
+        )
+
+        .setFooter({
+            text: "Cooldown: 10 giây"
+        });
+
+    await msg.edit({
+
+        embeds: [result]
+
+    });
+
+    return;
+
+        }
 
   // Bỏ qua tin nhắn trong DM
   if (!message.guild) return;
@@ -63,6 +400,65 @@ client.on("messageCreate", async (message) => {
   const player = players.get(message.author.id);
 
   if (!player) return;
+  // =========================
+// LỆNH MSING
+// =========================
+
+if (message.content.toLowerCase() === "msing") {
+
+    const now = Date.now();
+
+    if (singCooldown.has(message.author.id)) {
+
+        const left = 10000 - (now - singCooldown.get(message.author.id));
+
+        if (left > 0)
+            return message.reply(`⏳ Hãy đợi **${Math.ceil(left / 1000)} giây** rồi hát tiếp.`);
+    }
+
+    singCooldown.set(message.author.id, now);
+
+    const player = getPlayer(message.author.id);
+
+    const loading = await message.reply({
+        embeds: [
+            new EmbedBuilder()
+                .setTitle("🎼 Hộp Nhạc Melody")
+                .setDescription("```Thư giãn cùng mình...```")
+                .setImage("https://media.tenor.com/j5m7K6kL8aUAAAAC/music-box.gif")
+                .setColor("#7B68EE")
+        ]
+    });
+
+    await new Promise(r => setTimeout(r, 3000));
+
+    const reward = randomReward();
+
+    player.notes += reward.amount;
+
+    addExp(player, reward.amount * 2);
+
+    await loading.edit({
+        embeds: [
+            new EmbedBuilder()
+                .setTitle("🎶 Bạn vừa cất tiếng hát!")
+                .setDescription(
+`✨ Độ hiếm: ${reward.rarity.emoji} **${reward.rarity.name}**
+
+🎵 Nhận được: **${reward.amount} Nốt Nhạc**
+
+📈 Level: **${player.level}**
+
+🎤 Danh hiệu:
+${player.singer}`
+                )
+                .setColor("#FFD700")
+        ]
+    });
+
+    return;
+
+      }
 
   const current = missions[player.stage];
 
