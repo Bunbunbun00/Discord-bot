@@ -77,7 +77,7 @@ client.on("messageCreate", async (message) => {
     // Đã hoàn thành hết
     if (player.stage >= missions.length) {
 
-      await message.reply("🎉 Chính xác!");
+      await message.reply("🎉 yeahh bạn đã làm đúng hết rồi!");
 
       await message.author.send(
 `🎉 **CHÚC MỪNG!**
@@ -90,7 +90,7 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
 3. ${player.answers[2]}
 4. ${player.answers[3]}
 
-📩 Bây giờ hãy mở **Ticket** và gửi 4 đáp án trên cho Staff để nhận thưởng.`
+📩 Bây giờ hãy mở **Ticket** và gửi 4 đáp án trên cho Staff để nhận thưởng nha.`
 );
 
       players.delete(message.author.id);
@@ -99,7 +99,7 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
     }
 
     // Gửi nhiệm vụ tiếp theo
-    await message.reply(`✅ Chính xác! Kiểm tra tin nhắn để nhận nhiệm vụ tiếp theo ${player.stage + 1}.`);
+    await message.reply(`✅ Bạn làm đúng rùii! Kiểm tra tin nhắn để nhận nhiệm vụ tiếp theo nè ${player.stage + 1}.`);
 
     await message.author.send(missions[player.stage].question);
 
