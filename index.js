@@ -20,70 +20,11 @@ const client = new Client({
 
 // Lưu tiến trình người chơi
 const players = new Map();
+const singCooldown = new Map();
 // =========================
 // MELODY GAME DATA
 // =========================
 
-const musicPlayers = new Map();
-const singCooldown = new Map();
-
-const RARITIES = [
-  { name: "Common", chance: 50, min: 1, max: 5, emoji: "⚪" },
-  { name: "Rare", chance: 30, min: 6, max: 12, emoji: "🟢" },
-  { name: "Epic", chance: 15, min: 13, max: 22, emoji: "🟣" },
-  { name: "Legendary", chance: 4, min: 23, max: 35, emoji: "🟠" },
-  { name: "Mythic", chance: 1, min: 36, max: 50, emoji: "🔴" }
-];
-
-function rand(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function getPlayer(id) {
-  if (!musicPlayers.has(id)) {
-    musicPlayers.set(id, {
-      notes: 0,
-      exp: 0,
-      level: 1,
-      singer: "🎤 Người mới"
-    });
-  }
-  return musicPlayers.get(id);
-}
-
-function addExp(player, exp) {
-  player.exp += exp;
-
-  while (player.exp >= player.level * 100) {
-    player.exp -= player.level * 100;
-    player.level++;
-
-    if (player.level >= 50) player.singer = "👑 Huyền thoại";
-    else if (player.level >= 30) player.singer = "🌟 Siêu sao";
-    else if (player.level >= 20) player.singer = "🎙️ Ca sĩ";
-    else if (player.level >= 10) player.singer = "🎶 Thực tập sinh";
-  }
-}
-
-function randomReward() {
-  let roll = Math.random() * 100;
-  let total = 0;
-
-  for (const r of RARITIES) {
-    total += r.chance;
-    if (roll <= total) {
-      return {
-        rarity: r,
-        amount: rand(r.min, r.max)
-      };
-    }
-  }
-
-  return {
-    rarity: RARITIES[0],
-    amount: 1
-  };
-    }
 //======================
 // Melody Game Database
 //======================
@@ -503,4 +444,5 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
 });
 
 client.login(process.env.TOKEN);
-      
+
+                
