@@ -17,7 +17,7 @@ const players = new Map();
 // Danh sách nhiệm vụ
 const missions = [
   {
-    question: "📝 **NHIỆM VỤ 1**\nTìm các số ngẫu nhiên được chat ngẫu nhiên trong sever.",
+    question: "📝 **NHIỆM VỤ 1**\n6 staff sẽ cầm 1 con số rải khắp kênh, nhiệm vụ là tìm và thu thập 6 con số từ nhỏ đến lớn để hoàn thành.",
     answer: "134679"
   },
   {
