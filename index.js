@@ -54,9 +54,9 @@ client.on("messageCreate", async (message) => {
 
     try {
       await message.author.send(missions[0].question);
-      return message.reply("📩 Đã gửi nhiệm vụ 1 vào DM.");
+      return message.reply("📩 Đã gửi nhiệm vụ 1 vào tin nhắn riêng của bạn.");
     } catch {
-      return message.reply("❌ Không thể gửi DM cho bạn.");
+      return message.reply("❌ Không thể gửi tin nhắn riêng cho bạn.");
     }
   }
 
@@ -112,3 +112,4 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
 });
 
 client.login(process.env.TOKEN);
+      
