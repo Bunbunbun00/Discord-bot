@@ -99,7 +99,7 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
     }
 
     // Gửi nhiệm vụ tiếp theo
-    await message.reply(`✅ Chính xác! Kiểm tra DM để nhận nhiệm vụ ${player.stage + 1}.`);
+    await message.reply(`✅ Chính xác! Kiểm tra tin nhắn để nhận nhiệm vụ tiếp theo ${player.stage + 1}.`);
 
     await message.author.send(missions[player.stage].question);
 
