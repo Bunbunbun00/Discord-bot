@@ -30,7 +30,7 @@ const missions = [
   },
   {
     question: "📝 **NHIỆM VỤ 4**\nĐây là manh mối cuối cùng: .... --- / -.-. .... .. / -- .. -. .... / ...- .. / -.. .- .. (Giải mã morse này để hoàn thành câu đố ngày 1).",
-    answer: "HO CHI MINH VI DAI"
+    answer: "HOCHIMINHVIDAI"
   }
 ];
 
@@ -102,11 +102,6 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
     await message.reply(`✅ Bạn làm đúng rùii! Kiểm tra tin nhắn để nhận nhiệm vụ  ${player.stage + 1}.`);
 
     await message.author.send(missions[player.stage].question);
-
-  } else {
-
-    message.reply("❌ Sai đáp án.");
-
   }
 
 });
