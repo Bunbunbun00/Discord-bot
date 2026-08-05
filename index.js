@@ -6,6 +6,7 @@ const {
 } = require("discord.js");
 
 const fs = require("fs");
+const path = require("path");
 
 const client = new Client({
   intents: [
@@ -31,6 +32,62 @@ const singCooldown = new Map();
 
 const musicPlayers = {};
 const cooldown = new Map();
+
+// =========================
+// LƯU / ĐỌC DỮ LIỆU (chống mất tiến trình khi bot restart)
+// =========================
+
+const DATA_FILE = path.join(__dirname, "data", "players.json");
+
+function loadData() {
+    try {
+        if (fs.existsSync(DATA_FILE)) {
+            const raw = fs.readFileSync(DATA_FILE, "utf8");
+            const parsed = JSON.parse(raw);
+
+            if (parsed.musicPlayers) {
+                Object.assign(musicPlayers, parsed.musicPlayers);
+            }
+
+            if (parsed.players) {
+                for (const [id, val] of Object.entries(parsed.players)) {
+                    players.set(id, val);
+                }
+            }
+
+            console.log("✅ Đã tải dữ liệu người chơi từ file.");
+        }
+    } catch (err) {
+        console.error("⚠️ Lỗi khi đọc file dữ liệu:", err);
+    }
+}
+
+function saveData() {
+    try {
+        const dir = path.dirname(DATA_FILE);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+
+        const data = {
+            musicPlayers,
+            players: Object.fromEntries(players)
+        };
+
+        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    } catch (err) {
+        console.error("⚠️ Lỗi khi lưu file dữ liệu:", err);
+    }
+}
+
+loadData();
+
+// Tự động lưu mỗi 20 giây (phòng trường hợp bot bị crash bất ngờ)
+setInterval(saveData, 20000);
+
+// Lưu ngay trước khi bot bị tắt/deploy lại
+process.on("SIGINT", () => { saveData(); process.exit(0); });
+process.on("SIGTERM", () => { saveData(); process.exit(0); });
 
 function getPlayer(id) {
 
@@ -275,6 +332,8 @@ if (message.content.toLowerCase() === "msing") {
 
     addExp(player, exp);
 
+    saveData();
+
     const bar =
         "🟩".repeat(
             Math.floor((player.exp / needExp(player.level)) * 10)
@@ -388,6 +447,8 @@ ${bar}
       answers: []
     });
 
+    saveData();
+
     try {
       await message.author.send(missions[0].question);
       return message.reply("📩 Đã gửi nhiệm vụ 1 vào tin nhắn riêng của bạn.");
@@ -410,6 +471,8 @@ ${bar}
 
     player.stage++;
 
+    saveData();
+
     // Đã hoàn thành hết
     if (player.stage >= missions.length) {
 
@@ -431,6 +494,8 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
 
       players.delete(message.author.id);
 
+      saveData();
+
       return;
     }
 
@@ -445,4 +510,4 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
 client.login(process.env.TOKEN);
 
 
-        
+    
