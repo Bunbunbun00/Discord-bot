@@ -190,6 +190,14 @@ client.once("ready", () => {
 
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
+
+  // 🛡️ Chống xử lý trùng 1 tin nhắn (nếu event bị bắn 2 lần vì bất kỳ lý do gì)
+  if (!client._handledMessages) client._handledMessages = new Set();
+  if (client._handledMessages.has(message.id)) return;
+  client._handledMessages.add(message.id);
+  // Dọn bộ nhớ sau 30 giây để không phình to
+  setTimeout(() => client._handledMessages.delete(message.id), 30000);
+
   //======================
 // msing
 //======================
@@ -319,6 +327,56 @@ EXP: **${player.exp}/${needExp(player.level)}**`
 
         }
 
+  // =========================
+  // MLV - Xem Level
+  // =========================
+
+  if (message.content.toLowerCase() === "mlv") {
+
+      const player = getPlayer(message.author.id);
+
+      const need = player.level * 100;
+
+      const percent = Math.floor((player.exp / need) * 10);
+
+      const bar =
+          "🟩".repeat(percent) +
+          "⬜".repeat(10 - percent);
+
+      const embed = new EmbedBuilder()
+          .setColor("#8A2BE2")
+          .setTitle("🎼 Melody Profile")
+          .setThumbnail(message.author.displayAvatarURL())
+          .setDescription(`
+👤 **${message.author.username}**
+
+🎤 Danh hiệu:
+${player.title}
+
+━━━━━━━━━━━━━━
+
+🎵 Melody Notes: **${player.notes}**
+
+⭐ Level: **${player.level}**
+
+📈 EXP:
+${bar}
+
+**${player.exp}/${need}**
+
+💰 Coin:
+**${player.coin || 0}**
+`)
+          .setFooter({
+              text: "Melody Journey"
+          });
+
+      return message.reply({
+          embeds: [embed]
+      });
+
+  }
+
   // Bỏ qua tin nhắn trong DM
   if (!message.guild) return;
 
@@ -386,3 +444,5 @@ Bạn đã hoàn thành toàn bộ nhiệm vụ.
 
 client.login(process.env.TOKEN);
 
+
+        
