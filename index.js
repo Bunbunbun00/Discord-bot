@@ -453,7 +453,7 @@ ${bar}
       await message.author.send(missions[0].question);
       return message.reply("📩 Đã gửi nhiệm vụ 1 vào tin nhắn riêng của bạn.");
     } catch {
-      return message.reply("❌ Không thể gửi tin nhắn riêng cho bạn.");
+      return message.reply("❌ Không thể gửi tin nhắn riêng cho bạnn.");
     }
   }
 
